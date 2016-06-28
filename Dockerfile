@@ -10,10 +10,10 @@ RUN apt-get update && apt-get install -y \
     ruby
 RUN gem install bundler
 
-# add app to VM filesystem
+# setup app environment
 ADD app ./
-RUN chmod +x newrelic-agent.rb
 RUN bundle install --path vendor/bundle
+RUN chmod +x newrelic-agent.rb
 
 # run our New Relic agent
-# RUN ./newrelic-agent.rb
+RUN ./newrelic-agent.rb
