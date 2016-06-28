@@ -4,7 +4,7 @@ require "rubygems"
 require "bundler/setup"
 
 require 'aws-sdk'
-require "newrelic_plugin"
+require "newrelic-plugin-config"
 
 AWS_SQS_URL = ENV['AWS_SQS_URL']
 
