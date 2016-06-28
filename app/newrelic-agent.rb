@@ -19,14 +19,21 @@ module WordstreamPythonAssertionErrors
     agent_human_labels("Example Agent") { "Synthetic example data" }
 
     def poll_cycle
+      puts "running NewRelic poll cycle"
+
       sqs_client = Aws::SQS::Client.new
+      puts 'getting queues'
+      puts sqs_client.list_queues
+      puts 'got queues'
       queue_poller = Aws::SQS::QueuePoller.new(AWS_SQS_URL)
 
-      puts "running poll"
+      puts 'set up poller. doing poll'
       queue_poller.poll do |msg|
+        puts 'received data!'
         puts msg.body
       end
-      puts "completed poll"
+
+      puts "completed NewRelic poll cycle"
     end
 
   end
