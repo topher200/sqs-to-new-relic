@@ -17,4 +17,4 @@ ADD app ./
 RUN chmod +x newrelic-agent.rb
 
 # run our New Relic agent
-# RUN ./newrelic-agent.rb
+# RUN ["./newrelic-agent.rb"]
