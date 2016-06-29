@@ -47,11 +47,10 @@ module WordstreamPythonAssertionErrors
 
       # send count to newrelic
       @@logger.debug "Sending count of %s to New Relic" % count
-      report_metric "Asserts", "Count", count
+      report_metric "Assertions", "asserts", count
 
       @@logger.debug "completed NewRelic poll cycle"
     end
-
   end
 
   #
