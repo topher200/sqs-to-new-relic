@@ -19,4 +19,4 @@ newrelic:
 #
 agents:
   pythonAssertionErrors:
-    hertz: 1000
+    new_relic_requires_something_here: 1000
