@@ -18,14 +18,14 @@ module WordstreamPythonAssertionErrors
     agent_human_labels("Python Assertion Errors from Papertrail") { "Asserts" }
 
     # kick off a thread to populate the local queue with messages from SQS
-    local_queue = Queue.new
+    @@local_queue = Queue.new
     Thread.new do
       queue_poller = Aws::SQS::QueuePoller.new(AWS_SQS_URL)
 
       puts 'set up poller. doing long poll'
       queue_poller.poll do |msg|
         puts 'received data from SQS! ', msg.body
-        local_queue.push msg.body
+        @@local_queue.push msg.body
       end
     end
 
@@ -34,9 +34,9 @@ module WordstreamPythonAssertionErrors
 
       # take any messages off the local queue and count them
       count = 0
-      while not local_queue.empty?
+      while not @@local_queue.empty?
         puts 'found message in local queue. current count: ', count
-        _ = local_queue.pop
+        _ = @@local_queue.pop
         count += 1
       end
 
