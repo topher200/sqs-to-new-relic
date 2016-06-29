@@ -24,7 +24,7 @@ module WordstreamPythonAssertionErrors
 
       puts 'set up poller. doing long poll'
       queue_poller.poll do |msg|
-        puts 'received data from SQS! ', msg.body
+        puts 'received data from SQS!'
         @@local_queue.push msg.body
       end
     end
