@@ -1,16 +1,21 @@
 #! /usr/bin/env ruby
 
-require "rubygems"
 require "bundler/setup"
+require "logger"
+require "rubygems"
 
 require 'aws-sdk'
 require "newrelic_plugin"
 
 AWS_SQS_URL = ENV['AWS_SQS_URL']
 
+STDOUT.sync = true
+
 module WordstreamPythonAssertionErrors
 
   class Agent < NewRelic::Plugin::Agent::Base
+    @@logger = Logger.new(STDOUT)
+    @@logger.level = Logger::DEBUG
 
     # NewRelic agent setup
     agent_guid "com.wordstream.python-assertion-errors-from-papertrail"
@@ -22,28 +27,29 @@ module WordstreamPythonAssertionErrors
     Thread.new do
       queue_poller = Aws::SQS::QueuePoller.new(AWS_SQS_URL)
 
-      puts 'set up poller. doing long poll'
+      @@logger.info 'set up poller. doing long poll'
       queue_poller.poll do |msg|
-        puts 'received data from SQS!'
+        @@logger.info 'received data from SQS!'
         @@local_queue.push msg.body
       end
     end
 
     def poll_cycle
-      puts "running NewRelic poll cycle"
+      @@logger.debug "running NewRelic poll cycle"
 
       # take any messages off the local queue and count them
       count = 0
       while not @@local_queue.empty?
-        puts 'found message in local queue. current count: ', count
+        @@logger.info 'found message in local queue. current count: %s' % count
         _ = @@local_queue.pop
         count += 1
       end
 
       # send count to newrelic
-      report_metric "Assertion errors", "count", count
+      @@logger.debug "Sending count of %s to New Relic" % count
+      report_metric "Asserts", "Count", count
 
-      puts "completed NewRelic poll cycle"
+      @@logger.debug "completed NewRelic poll cycle"
     end
 
   end
