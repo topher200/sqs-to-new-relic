@@ -19,3 +19,4 @@ newrelic:
 #
 agents:
   pythonAssertionErrors:
+    hertz: 1000
