@@ -40,9 +40,9 @@ module WordstreamPythonAssertionErrors
       # take any messages off the local queue and count them
       count = 0
       while not @@local_queue.empty?
-        @@logger.info 'found message in local queue. current count: %s' % count
-        _ = @@local_queue.pop
         count += 1
+        @@logger.info 'found message in local queue. count: %s' % count
+        _ = @@local_queue.pop
       end
 
       # send count to newrelic
