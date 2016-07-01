@@ -35,8 +35,6 @@ module WordstreamPythonAssertionErrors
     end
 
     def poll_cycle
-      @@logger.debug "running NewRelic poll cycle"
-
       # take any messages off the local queue and count them
       count = 0
       while not @@local_queue.empty?
@@ -48,8 +46,6 @@ module WordstreamPythonAssertionErrors
       # send count to newrelic
       @@logger.debug "Sending count of %s to New Relic" % count
       report_metric "Assertions", "asserts", count
-
-      @@logger.debug "completed NewRelic poll cycle"
     end
   end
 
